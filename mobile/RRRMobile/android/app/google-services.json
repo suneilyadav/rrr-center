@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "725378297726",
+    "project_id": "rrr-center-narmadapuram",
+    "storage_bucket": "rrr-center-narmadapuram.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725378297726:android:3cdd72bb0b473ddde04d2f",
+        "android_client_info": {
+          "package_name": "com.rrrmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725378297726-q5bnmkutq8pk7vfnlh7niicvdfr4se6i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rrrmobile",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "725378297726-iab77152fru03o832kmjagcl8t277m7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwG3BSKlPBZ1aR2qr7iW5B6M6B_EdvNOw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725378297726-iab77152fru03o832kmjagcl8t277m7d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
