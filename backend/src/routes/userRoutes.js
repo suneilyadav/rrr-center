@@ -7,15 +7,14 @@ const pool = require("../db");
 // ✅ Register User (Google Login के बाद)
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, phone, ward_no, address } = req.body;
+const { email, phone, ward, address } = req.body;
 
     // ✅ Mandatory Fields Check
-    if (!name || !email || !phone || !ward_no || !address) {
-      return res.status(400).json({
-        error:
-          "All fields required: name, email, phone, ward_no, address",
-      });
-    }
+if (!email || !phone || !ward || !address) {
+  return res.status(400).json({
+    error: "All fields required: email, phone, ward, address",
+  });
+}
 
     // ✅ Check if user already exists
     const existing = await pool.query(
@@ -25,29 +24,29 @@ router.post("/register", async (req, res) => {
 
 if (existing.rows.length > 0) {
   // ✅ Update missing details
-  const updated = await pool.query(
-    `UPDATE users
-     SET phone=$1, ward_no=$2, address=$3
-     WHERE email=$4
-     RETURNING *`,
-    [phone, ward_no, address, email]
-  );
+const updated = await pool.query(
+  `UPDATE users
+   SET phone=$1, ward=$2, address=$3
+   WHERE email=$4
+   RETURNING *`,
+  [phone, ward, address, email]
+);
 
   return res.json(updated.rows[0]);
 }
 
     // ✅ Insert new user
-    const result = await pool.query(
-      `INSERT INTO users (name, email, phone, ward_no, address)
-       VALUES ($1,$2,$3,$4,$5)
-       RETURNING *`,
-      [name, email, phone, ward_no, address]
-    );
+const result = await pool.query(
+  `INSERT INTO users (email, phone, ward, address)
+   VALUES ($1,$2,$3,$4)
+   RETURNING *`,
+  [email, phone, ward, address]
+);
 
     res.json(result.rows[0]);
   } catch (err) {
     console.error("Register Error:", err);
-    res.status(500).send("Server Error");
+res.status(500).json({ error: err.message });
   }
 });
 
