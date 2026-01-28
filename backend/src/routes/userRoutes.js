@@ -7,14 +7,15 @@ const pool = require("../db");
 // ✅ Register User (Google Login के बाद)
 router.post("/register", async (req, res) => {
   try {
-const { email, phone, ward, address } = req.body;
+    // ✅ Google से name भी आएगा
+    const { name, email, phone, ward, address } = req.body;
 
     // ✅ Mandatory Fields Check
-if (!email || !phone || !ward || !address) {
-  return res.status(400).json({
-    error: "All fields required: email, phone, ward, address",
-  });
-}
+    if (!email || !phone || !ward || !address) {
+      return res.status(400).json({
+        error: "All fields required: email, phone, ward, address",
+      });
+    }
 
     // ✅ Check if user already exists
     const existing = await pool.query(
@@ -22,31 +23,31 @@ if (!email || !phone || !ward || !address) {
       [email]
     );
 
-if (existing.rows.length > 0) {
-  // ✅ Update missing details
-const updated = await pool.query(
-  `UPDATE users
-   SET phone=$1, ward=$2, address=$3
-   WHERE email=$4
-   RETURNING *`,
-  [phone, ward, address, email]
-);
+    // ✅ If already exists → Update missing details
+    if (existing.rows.length > 0) {
+      const updated = await pool.query(
+        `UPDATE users
+         SET name=$1, phone=$2, ward=$3, address=$4
+         WHERE email=$5
+         RETURNING *`,
+        [name || existing.rows[0].name, phone, ward, address, email]
+      );
 
-  return res.json(updated.rows[0]);
-}
+      return res.json(updated.rows[0]);
+    }
 
     // ✅ Insert new user
-const result = await pool.query(
-  `INSERT INTO users (email, phone, ward, address)
-   VALUES ($1,$2,$3,$4)
-   RETURNING *`,
-  [email, phone, ward, address]
-);
+    const result = await pool.query(
+      `INSERT INTO users (name, email, phone, ward, address)
+       VALUES ($1,$2,$3,$4,$5)
+       RETURNING *`,
+      [name || "", email, phone, ward, address]
+    );
 
     res.json(result.rows[0]);
   } catch (err) {
     console.error("Register Error:", err);
-res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -63,6 +64,7 @@ router.get("/", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
 // ✅ Admin: Disable / Enable User
 router.patch("/:id/disable", async (req, res) => {
   try {
@@ -83,7 +85,7 @@ router.patch("/:id/disable", async (req, res) => {
 // ✅ Admin: Delete User
 router.delete("/:id", async (req, res) => {
   try {
-console.log("🔥 DELETE USER HIT:", req.params.id);
+    console.log("🔥 DELETE USER HIT:", req.params.id);
 
     const { id } = req.params;
 
@@ -94,7 +96,6 @@ console.log("🔥 DELETE USER HIT:", req.params.id);
     console.error("Delete User Error:", err);
     res.status(500).send("Server Error");
   }
-
 });
 
 module.exports = router;
