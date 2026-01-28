@@ -18,7 +18,7 @@ function Dashboard({ onLogout }) {
   // ======================================================
   const fetchRecords = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/items");
+      const res = await fetch("https://rrr-backend-ftcw.onrender.com/api/items");
       const data = await res.json();
 
       const formatted = data.map((item) => ({
@@ -50,7 +50,7 @@ function Dashboard({ onLogout }) {
   // ======================================================
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users");
+      const res = await fetch("https://rrr-backend-ftcw.onrender.com/api/users");
       const data = await res.json();
       setUsers(data);
     } catch (err) {
@@ -70,7 +70,7 @@ function Dashboard({ onLogout }) {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this entry?")) return;
 
-    await fetch(`http://localhost:5000/api/items/${id}`, {
+    await fetch(`https://rrr-backend-ftcw.onrender.com/api/items/${id}`, {
       method: "DELETE",
     });
 
@@ -83,7 +83,7 @@ function Dashboard({ onLogout }) {
 const handleUserDelete = async (id) => {
   if (!window.confirm("Delete this user?")) return;
 
-  await fetch(`http://localhost:5000/api/users/${id}`, {
+  await fetch(`https://rrr-backend-ftcw.onrender.com/api/users/${id}`, {
     method: "DELETE",
   });
 
@@ -94,7 +94,7 @@ const handleUserDelete = async (id) => {
 // ✅ DISABLE / ENABLE USER (Admin)
 // ======================================================
 const handleUserDisable = async (id) => {
-  await fetch(`http://localhost:5000/api/users/${id}/disable`, {
+  await fetch(`https://rrr-backend-ftcw.onrender.com/api/users/${id}/disable`, {
     method: "PATCH",
   });
 
@@ -105,7 +105,7 @@ const handleUserDisable = async (id) => {
   // ✅ MARK AS COLLECTED (Admin)
   // ======================================================
   const markCollected = async (id) => {
-    await fetch(`http://localhost:5000/api/items/${id}/collect`, {
+    await fetch(`https://rrr-backend-ftcw.onrender.com/api/items/${id}/collect`, {
       method: "POST",
     });
 
@@ -127,7 +127,7 @@ const handleUserDisable = async (id) => {
     wardSearch === ""
       ? users
       : users.filter((u) =>
-          u.ward_no.toLowerCase().includes(wardSearch.toLowerCase())
+          u.ward.toLowerCase().includes(wardSearch.toLowerCase())
         );
 
   // ======================================================
@@ -158,7 +158,7 @@ const handleUserDisable = async (id) => {
       "ID,Name,Email,Phone,Ward No,Address,Registered Date\n";
 
     filteredUsers.forEach((u) => {
-      csv += `${u.id},${u.name},${u.email},${u.phone},${u.ward_no},"${u.address}",${
+      csv += `${u.id},${u.name},${u.email},${u.phone},${u.ward},"${u.address}",${
         u.created_at ? u.created_at.split("T")[0] : "-"
       }\n`;
     });
@@ -437,7 +437,7 @@ const handleUserDisable = async (id) => {
                   <td>{u.name}</td>
                   <td>{u.email}</td>
                   <td>{u.phone}</td>
-                  <td>{u.ward_no}</td>
+                  <td>{u.ward}</td>
                   <td>{u.address}</td>
                   <td>
                     {u.created_at ? u.created_at.split("T")[0] : "-"}
